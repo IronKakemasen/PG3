@@ -1,86 +1,52 @@
-﻿#include<iostream>
-#include <list>
+﻿#include <iostream>
+#include <thread>
+#include <chrono>
 #include <vector>
+#include <functional>
+#include <time.h>
+#include <stdlib.h>
+
 
 using namespace std;
 
+
+void DelayedReveal(function<void(int roll_, int prediction_)> func_showResult_, int delayNum_, int input_);
+
 int main()
 {
-	int const kNumStations = 30;
-	std::list<string> list{
-		"Osaki",
-		"Gotanda",
-		"Meguro",
-		"Ebisu",
-		"Shibuya",
-		"Harajuku",
-		"Yoyogi",
-		"Shinjuku",
-		"Shin - Ōkubo",
-		"Takadanobaba",
-		"Mejiro",
-		"Ikebukuro",
-		"Ōtsuka",
-		"Sugamo",
-		"Komagome",
-		"Tabata",
+	srand(unsigned int(time(NULL)));
 
-		"Nippori",
-		"Uguisudani",
-		"Ueno",
-		"Okachimachi",
-		"Akihabara",
-		"Kanda",
-		"Tōkyo",
-		"Yurakucho",
-		"Shimbashi",
-		"Hamamatsuchō",
-		"Tamachi",
+	int inpuntNum = 0;
+	cout << "0か1を入力";
+	scanf_s("%d", &inpuntNum);
 
-		"Shinagawa",
+	auto func_showResult = [](int roll_,int prediction_ ) 
+	{
+		if (roll_ % 2 == prediction_)
+		{
+			cout << "正解" << endl;
+		}
+
+		else
+		{
+			cout << "不正解" << endl;
+		}
 	};
 
 
-
-	int count = 0;
-	for (auto i = list.begin(); i != list.end(); ++i)
-	{
-		if (count == 15)
-		{
-			string name = "Nishi - Nippori";
-			i = list.insert(i, name);
-		}
-
-		else if (count == 27)
-		{
-			string name = "Takanawa Gateway";
-			i = list.insert(i, name);
-		}
-
-		count++;
-
-		
-
-
-	}
-
-
-	for (auto i = list.begin(); i != list.end(); ++i)
-	{
-
-		cout << (*i) << endl;
-
-	}
-
-
-
-
-
-
-
-	
-
+	DelayedReveal(func_showResult, 3, inpuntNum);
 
 
 	return 0;
 }
+
+void DelayedReveal(function<void(int roll_, int prediction_)> func_showResult_, int delayNum_, int input_)
+{
+	std::this_thread::sleep_for(std::chrono::seconds(delayNum_));
+
+	int roll = rand() % 6 + 1;
+
+
+	func_showResult_(roll, input_);
+}
+
